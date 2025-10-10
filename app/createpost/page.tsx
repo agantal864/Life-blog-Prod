@@ -7,9 +7,14 @@ import { Mybutton } from '@/components/common/button';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
+import {useSession} from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function CreatePost() {
+    const { data: currentSession } = useSession();
+    const router = useRouter();
     const isAdmin = false;
+    const [title, setTitle] = useState('');
     const [content, setContent] = useState<string | undefined>('');
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
@@ -87,6 +92,33 @@ export default function CreatePost() {
         setIsUploading(false);
     };
 
+    const handleSubmit = async () => {
+        if (!currentSession?.user?.id) {
+            console.error('No author ID found in session');
+            return;
+        }
+
+        const res = await fetch('/api/create-post', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            title,
+            content,
+            thumbnailUrl,
+            isFeatured: false,
+            tags: [],
+            }),
+        });
+        
+        if (res.ok) {
+            const result = await res.json();
+            console.log("Post created:", result);
+            router.push('/'); 
+        } else {
+            console.error("Failed to create post");
+        }
+    };
+
     return (
         <SectionLayout id="createpost">
         <CardLayout>
@@ -106,6 +138,8 @@ export default function CreatePost() {
                         <h2 className="font-serif font-medium text-lg">Title</h2>
                         <input className="w-full flex-grow rounded-sm bg-gray-100 px-2 py-0.5 text-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 outline-1"
                             type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             placeholder="Enter Title"/>
                     </div>
                     {/* Content */}
@@ -139,7 +173,7 @@ export default function CreatePost() {
                     </div>
                 </div>
                 {/* Create New Post Button*/}
-                <Mybutton disabled={isUploading} content="Create Post" pxDefault="px-2" pyDefault="py-2" />
+                <Mybutton disabled={isUploading} content="Create Post" pxDefault="px-2" pyDefault="py-2" onClick={handleSubmit} />
             </div>
         </CardLayout>
         </SectionLayout>

@@ -32,6 +32,7 @@ interface ButtonProps {
     mrDefault?: string
     mrMd?: string
     disabled?: boolean
+    onClick?: () => void;
 }
 
 export function Mybutton ({
@@ -57,7 +58,8 @@ export function Mybutton ({
     myMd,
     mrDefault,
     mrMd,
-    disabled
+    disabled,
+    onClick
 }: ButtonProps) {
     const IconComponent = iconName ? icons[iconName] : undefined
     if (iconName) {
@@ -65,6 +67,7 @@ export function Mybutton ({
                 <button
                     disabled={disabled}
                     type="submit"
+                    onClick={onClick}
                     className={`bg-black text-white text-sm rounded-md cursor-pointer inline-flex justify-between items-center
                     ${pxDefault} ${pyDefault} ${pxXl} ${pxLg} ${pxMd} ${pyXl} ${pyLg} ${pyMd} ${mxDefault} ${myDefault} ${mxXl}
                     ${mxLg} ${mxMd} ${myXl} ${myLg} ${myMd} ${mrDefault} ${mrMd}
@@ -119,6 +122,7 @@ export function Mybutton ({
         return (
                 <button
                     type="submit"
+                    onClick={onClick}
                     className={`bg-black text-white text-sm rounded-md cursor-pointer 
                     ${pxDefault} ${pyDefault} ${pxXl} ${pxLg} ${pxMd} ${pyXl} ${pyLg} ${pyMd} ${mxDefault} ${myDefault} ${mxXl}
                     ${mxLg} ${mxMd} ${myXl} ${myLg} ${myMd}
