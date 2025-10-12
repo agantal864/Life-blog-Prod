@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { auth } from "@/auth"
+import slugify from "slugify";
 
 const prisma = new PrismaClient();
 
@@ -9,6 +10,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
     const { title, content, thumbnailUrl, isFeatured, tags } = body;
+    const slug = slugify(title, { lower: true, strict: true });
   
     const post = await prisma.post.create({
         data: {
@@ -18,6 +20,7 @@ export async function POST(req: Request) {
         isFeatured,
         tags,
         authorId: currentSession?.user?.id,
+        slug
         },
     });
 

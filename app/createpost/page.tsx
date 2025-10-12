@@ -13,7 +13,6 @@ import { useRouter } from 'next/navigation';
 export default function CreatePost() {
     const { data: currentSession } = useSession();
     const router = useRouter();
-    const isAdmin = false;
     const [title, setTitle] = useState('');
     const [content, setContent] = useState<string | undefined>('');
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
@@ -113,7 +112,7 @@ export default function CreatePost() {
         if (res.ok) {
             const result = await res.json();
             console.log("Post created:", result);
-            router.push('/'); 
+            router.push(`/post/${result.slug}`); 
         } else {
             console.error("Failed to create post");
         }
@@ -146,7 +145,8 @@ export default function CreatePost() {
                     <div className="flex flex-col space-y-1">
                         <h2 className="font-serif font-medium text-lg">Content (Markdown)</h2>
                         <div className="bg-gray-100 rounded-sm p-2" onDragOver={(e) => e.preventDefault()} onDrop={HandleContentImgDrop}>
-                            <MDEditor value={content} onChange={setContent} preview="edit" height={600}/>
+                            <MDEditor value={content} onChange={setContent} preview="edit" height={600}
+                                className="prose prose-neutral max-w-none"/>
                         </div>
                     </div>
                     {/* Thumbnail */}

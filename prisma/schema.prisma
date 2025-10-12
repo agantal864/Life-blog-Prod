@@ -8,6 +8,7 @@ datasource db {
 }
 
 model Account {
+  // Fields required for Next.js Authentication
   userId            String
   type              String
   provider          String
@@ -28,54 +29,112 @@ model Account {
   @@id([provider, providerAccountId])
 }
 
-// model Session {
-//   sessionToken String   @unique
-//   userId       String
-//   expires      DateTime
-//   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
- 
-// model VerificationToken {
-//   identifier String
-//   token      String
-//   expires    DateTime
- 
-//   @@id([identifier, token])
-// }
-
 model User {
+  // User Id
   id            String          @id @default(cuid())
+  // Username (linked to Google Username)
   name          String?
+  // User email (linked to Google Email)
   email         String          @unique
-  emailVerified DateTime?
+  // User Photo (linked to Google Photo)
   image         String?
+  // If user is Admin or not
   isAdmin       Boolean         @default(false)
+
+  // Each User can have many accounts, and those accounts are linked to this User (tracks how many accounts are linked to the user)
   accounts      Account[]
+  // Each User can have many posts, and those posts are linked to this User (tracks how many posts are linked to the user)
   posts         Post[]
- 
+  // Each User can have many comments, and those comments are linked to this User (tracks how many comments are linked to the user)
+  comments      Comment[]
+  // Each User can have many likes, and those likes are linked to this User (tracks how many likes are linked to the user)
+  likes         Like[]
+
+  // Records the exact moment the entry was first created.
   createdAt DateTime @default(now())
+  // Tracks the last time the record was modified.
   updatedAt DateTime @updatedAt
 }
  
 model Post {
-  id            String         @id @default(cuid())
+  // Post Id
+  id                  String          @id @default(cuid())
+  // For Dynamic Routing
+  slug                String          @unique
+  // Title of the Post
+  title               String
+  //  Post Content
+  content             String
+  //  Thumbnail Image URL of the Post
+  thumbnailUrl        String
+  //  Likes Counter
+  likesCount          Int             @default(0)
+  // Comments Counter
+  commentsCount       Int             @default(0)
+  // If Post is included in the Featured Section or not
+  isFeatured          Boolean         @default(false)
+  // If Post is published or not
+  published           Boolean         @default(false)
+  // Post Tags
+  tags	              String[]        @default([])
+  // View Counter
+  views               Int             @default(0)
 
-  title         String
-  content       String
-  thumbnailUrl  String
-  likes         Int@default(0)
-  comments      Int@default(0)
-  isFeatured    Boolean
-  tags	        String[] @default([])
-  views         Int @default(0)
+  // Set to the Id of the author of the Post (foreign key)
+  authorId            String
+  // Relation between Post and User: authorId in Post model === id in User model (used to access the User fields of the Poster)
+  author              User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  published     Boolean @default(false)
-  author        User    @relation(fields: [authorId], references: [id])
-  authorId      String
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  // Each post can have many comments, and those comments are linked to this post (tracks how many comments are linked to the Post)
+  comments            Comment[]
+  // Each post can have many likes, and those likes are linked to this post (tracks how many likes are linked to the Post)
+  likes               Like[]
+  
+  // Records the exact moment the entry was first created.
+  createdAt           DateTime        @default(now())
+  //  Tracks the last time the record was modified.
+  updatedAt           DateTime        @updatedAt
 }
+
+model Like {
+  // Like Id
+  id        String   @id @default(cuid())
+  
+  // Set to the Id of the post where the Like is located (foreign key)
+  postId    String
+  // Relation between Like and Post: postId in Like model === id in Post model (used to access the Post fields of the Post where the like is located)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  // Set to the Id of the user who liked the post
+  userId    String
+  // Relation between Like and User: userId in Like model === id in User model (used to access the User fields of the liker)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Records the exact moment the entry was first created.
+  createdAt DateTime @default(now())
+  // ensures one like per user per post
+  @@unique([postId, userId]) 
+}
+
+model Comment {
+  //  Comment Id
+  id              String          @id @default(cuid())
+  //  Comment Content
+  content         String
+
+  // Set to the Id of the post where the comment is located (foreign key)
+  postId          String
+  // Relation between Comment and Post: postId in Comment model === id in Post model (used to access the Post fields of the Post where the comment is located)
+  post            Post            @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  // Set to the Id of the author of the comment (foreign key)
+  authorId        String 
+  // Relation between Comment and User: authorId in Comment model === id in User model (used to access the User fields of the commenter)
+  author          User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  // Records the exact moment the entry was first created.
+  createdAt DateTime @default(now())
+  //  Tracks the last time the record was modified.
+  updatedAt DateTime @updatedAt
+}
+
