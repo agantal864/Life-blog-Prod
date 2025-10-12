@@ -73,12 +73,12 @@ model Post {
   commentsCount       Int             @default(0)
   // If Post is included in the Featured Section or not
   isFeatured          Boolean         @default(false)
-  // If Post is published or not
-  published           Boolean         @default(false)
   // Post Tags
   tags	              String[]        @default([])
   // View Counter
   views               Int             @default(0)
+  // Anonymous View Counter
+  anonymousViews  Int                 @default(0)
 
   // Set to the Id of the author of the Post (foreign key)
   authorId            String
@@ -89,6 +89,8 @@ model Post {
   comments            Comment[]
   // Each post can have many likes, and those likes are linked to this post (tracks how many likes are linked to the Post)
   likes               Like[]
+  // Each post can have many viewers, and those viewers are linked to this post (tracks how many views are linked to the Post)
+  viewers             Viewer[]
   
   // Records the exact moment the entry was first created.
   createdAt           DateTime        @default(now())
@@ -136,5 +138,18 @@ model Comment {
   createdAt DateTime @default(now())
   //  Tracks the last time the record was modified.
   updatedAt DateTime @updatedAt
+}
+
+model Viewer {
+  // Viewer Id
+  id      String   @id @default(cuid())
+  
+  // Set to the Id of the post where the viewer is at (foreign key)
+  postId  String
+  // Relation between Viewer and Post: postId in Viewer model === id in Post model (used to access the Post fields of the Post where the viewer is at)
+  post    Post     @relation(fields: [postId], references: [id])
+
+  // Set to the Id of the user who viewed the post: userId = id in the current session
+  userId  String
 }
 

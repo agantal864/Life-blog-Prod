@@ -11,22 +11,16 @@ export async function POST(req: Request) {
     return new Response("Missing data", { status: 400 });
   }
 
+  // Create the comment
   const comment = await prisma.comment.create({
     data: {
       content,
       postId,
       authorId: session.user.id,
     },
-    include: {
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-    },
   });
 
+  // Update the post's comment count
   await prisma.post.update({
     where: { id: postId },
     data: {
@@ -34,7 +28,25 @@ export async function POST(req: Request) {
         increment: 1,
       },
     },
-  })
+  });
 
-  return Response.json(comment);
+  // Fetch the comment again with full author info
+  const enrichedComment = await prisma.comment.findUnique({
+    where: { id: comment.id },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+          isAdmin: true,
+        },
+      },
+    },
+  });
+
+  return Response.json(enrichedComment);
 }

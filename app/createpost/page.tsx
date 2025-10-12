@@ -3,18 +3,22 @@
 import SectionLayout from '@/components/layout/SectionLayout';
 import { CardLayout } from '@/components/ui/Featured/FeatureCard';
 import { Mybutton } from '@/components/common/button';
+import FeaturedToggle from '@/components/ui/createpost/toggle'
 //ux
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 import {useSession} from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import TagInput from '@/components/ui/createpost/tagInput';
 
 export default function CreatePost() {
     const { data: currentSession } = useSession();
     const router = useRouter();
     const [title, setTitle] = useState('');
     const [content, setContent] = useState<string | undefined>('');
+    const [tags, setTags] = useState<string[]>([]);
+    const [isFeatured, setIsFeatured] = useState(false);
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -104,8 +108,8 @@ export default function CreatePost() {
             title,
             content,
             thumbnailUrl,
-            isFeatured: false,
-            tags: [],
+            isFeatured,
+            tags
             }),
         });
         
@@ -149,6 +153,10 @@ export default function CreatePost() {
                                 className="prose prose-neutral max-w-none"/>
                         </div>
                     </div>
+                    {/* Tags */}
+                    <TagInput tags={tags} setTags={setTags} />
+                    {/* Toggle isFeatured */}
+                    <FeaturedToggle isFeatured={isFeatured} onToggle={() => setIsFeatured((prev) => !prev)}/>
                     {/* Thumbnail */}
                     <div className="flex flex-col space-y-1">
                         <h2 className="font-serif font-medium text-lg">Thumbnail (Required)</h2>

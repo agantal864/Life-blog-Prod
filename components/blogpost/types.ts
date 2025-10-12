@@ -2,7 +2,11 @@ export type Post = {
   id: string;
   title: string;
   content: string;
+  tags: string[];
+  isFeatured: boolean;
   thumbnailUrl: string;
+  views: number;
+  anonymousViews: number;
   createdAt:  Date;
   likesCount: number;
   commentsCount: number;

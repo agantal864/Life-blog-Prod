@@ -12,6 +12,16 @@ function Navbar() {
     const [MenuisOpen, MenusetIsOpen] = useState(false);
     const { data: currentsession, status } = useSession();
 
+    const handleLogin = async () => {
+        const currentPath = window.location.pathname + window.location.search;
+        await login(currentPath);
+    };
+
+    const handleLogout = async () => {
+        const currentPath = window.location.pathname + window.location.search;
+        await logout(currentPath);
+    };
+
     if (status === 'loading') return null;
 
     return(
@@ -67,7 +77,7 @@ function Navbar() {
                                         <div className="absolute top-full right-0 w-40 flex flex-col items-start space-y-2 px-6 py-4 mt-4 rounded-lg bg-white font-normal transition-all duration-300 ease-in-out"
                                         style={{ boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.25)' }}>
                                             <h1 className="font-serif text-lg font-light mb-3">{currentsession?.user?.name}</h1>
-                                            <form action={logout}>
+                                            <form action={handleLogout}>
                                                 <button type="submit" className="cursor-pointer font-bold">
                                                     Sign Out
                                                 </button>
@@ -81,7 +91,7 @@ function Navbar() {
                         (
                             <div className="flex flex-row">
                             <div className="md:hidden flex items-center mr-3"><Sun className="text-[#71717b] w-4 h-4"/> </div>
-                            <form action={login}>
+                            <form action={handleLogin}>
                                 <Mybutton content="Sign In" pxDefault="px-3" pxLg="lg:px-5" pyDefault="py-1.5"/>
                             </form>
                             </div>
