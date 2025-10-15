@@ -1,8 +1,7 @@
 import { NextRequest } from 'next/server';
 import { cookies } from 'next/headers';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+// Data fetching (server-side): uses shared instance to avoid connection pooling
+import { prisma } from '@/lib/prismaclient';
 
 export async function POST(req: NextRequest) {
   const { postId } = await req.json();

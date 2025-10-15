@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+// Data fetching (server-side): uses shared instance to avoid connection pooling
+import { prisma } from '@/lib/prismaclient';
 
 async function main() {
   await prisma.user.upsert({

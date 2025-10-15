@@ -1,9 +1,20 @@
+'use client';
 import Link from 'next/link';
 import Image from "next/image";
 import { FaGithub, FaLinkedin, FaInstagram} from 'react-icons/fa';
 import { RiTwitterXFill } from "react-icons/ri";
+import { useTheme } from "next-themes";
+import { useState, useEffect } from 'react';
 
 function Footer() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true); 
+  }, []);
+
+  const logoSrc = theme === 'dark' ? '/websitelogowhite.svg' : '/websitelogo.svg';
   return (
     <footer style={{ boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.18)', backdropFilter: 'blur(7.5px)', background: 'rgba(255, 255, 255, 0.3)'}}>
       <div className="max-w-7xl mx-auto px-10 md:px-12 lg:px-20">
@@ -11,7 +22,9 @@ function Footer() {
             {/* Left Section */}
             <div className="font-medium space-y-10 md:space-y-20">
                 <div className="space-y-4">
-                    <Image src="/websitelogo.svg" alt="Logo" width={60} height={30} />
+                  {mounted && (
+                    <Image src={logoSrc} alt="Logo" width={60} height={30} />
+                  )}
                     <p className="text-sm">Built using Next.js & TailwindCSS</p>
                 </div>
                 <p className="text-sm">© 2025 Azis Agantal. All rights reserved.</p>
@@ -30,10 +43,10 @@ function Footer() {
               <div>
                 <ul className="space-y-0.5 text-base font-semibold"> 
                   <li className="font-bold mb-2">Links</li> 
-                  <li className="flex items-center"><a href="https://www.linkedin.com/in/azis-agantal-35a837212/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><FaLinkedin className="inline-flex text-lg mb-1 mr-1"/>Linkedin</a></li>
-                  <li className="flex items-center"><a href="https://x.com/AgantalAzis" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><RiTwitterXFill className="inline-flex text-lg mb-1 mr-1"/>Twitter</a></li>
-                  <li className="flex items-center"><a href="https://www.instagram.com/zsgntl/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><FaInstagram className="inline-flex text-lg mb-1 mr-1"/>Instagram</a></li>
-                  <li className="flex items-center"><a href="https://github.com/agantal864" target="_blank" rel="noopener noreferrer" className="hover:text-white transition"><FaGithub className="inline-flex text-lg mb-1 mr-1"/>Github</a></li>
+                  <li className="flex items-center"><a href="https://www.linkedin.com/in/azis-agantal-35a837212/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition"><FaLinkedin className="inline-flex text-lg mb-1 mr-1"/>Linkedin</a></li>
+                  <li className="flex items-center"><a href="https://x.com/AgantalAzis" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition"><RiTwitterXFill className="inline-flex text-lg mb-1 mr-1"/>Twitter</a></li>
+                  <li className="flex items-center"><a href="https://www.instagram.com/zsgntl/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition"><FaInstagram className="inline-flex text-lg mb-1 mr-1"/>Instagram</a></li>
+                  <li className="flex items-center"><a href="https://github.com/agantal864" target="_blank" rel="noopener noreferrer" className="hover:text-gray-400 transition"><FaGithub className="inline-flex text-lg mb-1 mr-1"/>Github</a></li>
                 </ul>
               </div>
             </div>            

@@ -45,7 +45,7 @@ export default function TagInput({tags, setTags}: {tags: string[], setTags: (tag
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Enter tags and press Enter"
-        className="w-full rounded-sm bg-gray-100 px-2 py-1 text-lg placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 outline-1"
+        className="text-sm md:text-md lg:text-lg xl:text-lg w-full rounded-sm bg-gray-100 px-2 py-1 dark:bg-black dark:placeholder:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 outline-1"
       />
     </div>
   )

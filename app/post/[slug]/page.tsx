@@ -1,8 +1,7 @@
-import BlogPost from "@/components/blogpost/post";
+import BlogPost from "@/components/blogPost/post";
 import { auth } from "@/auth";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+// Data fetching (server-side): uses shared instance to avoid connection pooling
+import { prisma } from '@/lib/prismaclient';
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const session = await auth();

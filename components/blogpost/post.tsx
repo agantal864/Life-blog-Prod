@@ -1,28 +1,37 @@
 'use client';
-//ui
+// UI
 import SectionLayout from "@/components/layout/SectionLayout";
-import { CardLayout } from "@/components/ui/Featured/FeatureCard";
+import { CardLayout } from "@/components/featured/FeatureCard"
 import { Heart, MessageCircle, ArrowLeft, Ellipsis, Eye} from 'lucide-react';
 import { Mybutton } from "@/components/common/button";
-
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks'
 import { formatDistanceToNow } from 'date-fns';
 import Image from "next/image";
+import toast from "react-hot-toast";
+// UI Navigation
 import Link from "next/link";
+// UX
 import { useState } from "react";
-import {Post} from "@/components/blogpost/types"
+// Blog Post Data Type
+import {Post} from "@/components/dataType/blogPost/types"
+// Session Data Type
 import type { Session } from '@auth/core/types';
-import AnonymousViewTracker from '@/components/blogpost/anonymousViewTracker';
+// AnonymousViewTracker
+import AnonymousViewTracker from '@/components/blogPost/anonymousViewTracker';
 
 function BlogPost({ post: initialPost, session: currentSession}: {post: Post; session: Session | null}) {
-
+    // Get Session
     const mysession = currentSession;
+    // Variable to store Post
     const [post, setPost] = useState<Post>(initialPost);
+    // Variable to store Comment
     const [commentText, setCommentText] = useState('');
+    // Variable to store Comment Id used for clicking button
     const [openCommentId, setOpenCommentId] = useState<string | null>(null);
-    
+
+    // Submit Comment Function
     const handleCommentSubmit = async () => {
         if (!mysession?.user?.id) {
             console.error('No author ID found in session');
@@ -53,6 +62,7 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
         }    
     }
 
+    // Like Function
     const handleLike = async () => {
          if (!mysession?.user?.id) {
             console.error('No author ID found in session');
@@ -80,6 +90,7 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
         }
     }
 
+    // Delete Comment Function
     const handleDelete = async (commentId: string) => {
         if (!mysession?.user?.id) {
             console.error('No author ID found in session');
@@ -89,7 +100,7 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
         const res = await fetch('/api/delete-comment', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ commentId }),
+            body: JSON.stringify({ commentId })
         });
 
         if (res.ok) {
@@ -107,6 +118,24 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
         }
     }
 
+    // Notify Subscriber Function
+    const handleNotifySubscriber = async () => {
+        toast.loading("Sending notifications...");  
+        const res = await fetch("/api/notify", { 
+            method: "POST", 
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify ({
+                postTitle: post?.title
+            })
+        });
+        toast.dismiss();
+        if (res.ok) {
+            toast.success("Subscribers notified!");
+        } else  {
+            toast.error("Failed to notify subscribers.");
+        }
+    }
+
     if (!post) return <div>Loading...</div>;
     
     return(
@@ -116,7 +145,7 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
                 <CardLayout>
                     {/* Back to Home */}
                     <Link href={"/"}>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 hover:scale-[1.01] transition-all duration-200 ease-in-out">
                             <ArrowLeft className="w-6 h-6 md:w-8 md:h-8"/>
                             <p className="text-sm md:text-base">Back to home</p>
                         </div>
@@ -140,7 +169,16 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
                             </div> 
                         </div>
                         {/* Background/Thumbnail */}
-                        <Image src={post.thumbnailUrl} alt={post.title} width={850} height={500} priority className="rounded-md my-5 md:my-10 w-full"/>   
+                        <div className="relative w-full aspect-[17/10] my-5 md:my-10 rounded-md overflow-hidden">
+                            <Image
+                                src={post.thumbnailUrl}
+                                alt={post.title}
+                                fill
+                                priority
+                                sizes="(max-width: 768px) 100vw, 850px"
+                                className="object-cover rounded-md"
+                            />
+                        </div>
                         {/* Content */}
                         <div className="prose prose-neutral max-w-none pb-4">               
                             <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -158,25 +196,49 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
                         {/* Tags */}
                         <div className="flex flex-wrap gap-2 mb-2 md:mb-3">
                             {post.tags.map((tag, index) => (
-                                <span key={index} className="inline-flex items-center bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-sm font-medium cursor-pointer">
-                                <span className="mr-2 inline-block w-1.5 h-1.5 rounded-full bg-gray-600" /> {tag}
-                                </span>
+                                <div key={index} className="group relative inline-block">
+                                    <span className="inline-flex items-center bg-gray-300 text-gray-800 px-3 py-1 rounded-full text-sm font-medium cursor-pointer">
+                                        <span className="mr-2 inline-block w-1.5 h-1.5 rounded-full bg-gray-600" /> 
+                                            {tag}
+                                    </span>
+                                     <span className="absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+4px)] mt-2 ml-2 whitespace-nowrap px-2 py-1 text-xs text-black bg-white dark:bg-[#ffffff4d] dark:text-white rounded-md shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                                        #{tag}
+                                    </span>                                    
+                                </div>
                             ))}
                         </div>
+                        {mysession?.user.isMasterAdmin && 
+                            <Mybutton onClick={handleNotifySubscriber} content="Notify Subscriber" pxDefault="px-2" pyDefault="py-2"/> 
+                        }
                         {/* Likes, Comments & Views */}
                         <div className="flex justify-between px-2 py-2 border-y-1 border-gray-300">
                             <div>
-                                <button onClick={handleLike} className="px-2 py-1 border-1 rounded-full inline-flex items-center space-x-2 mr-3 hover:bg-gray-100 cursor-pointer">
-                                    <Heart className={`w-4 h-4 hover:fill-[#FF0000] hover:stroke-[#FF0000] transition-colors duration-200 ${post.hasLiked ? 'fill-[#FF0000] stroke-[#FF0000]' : ''}`}/> 
-                                    <p className="text-xs">{post.likesCount}</p>
-                                </button>
-                                <button className="px-2 py-1 border-1 rounded-full inline-flex items-center space-x-2 hover:bg-gray-100 cursor-pointer">
-                                    <MessageCircle className="w-4 h-4 hover:text-blue-500 transition-colors duration-200"/> 
-                                    <p className="text-xs">{post.commentsCount}</p>
-                                </button>
+                                <div className="group relative inline-block">
+                                    <button onClick={handleLike} className="px-2 py-1 border-1 rounded-full inline-flex items-center space-x-2 mr-3 hover:bg-gray-200 dark:hover:bg-neutral-700 cursor-pointer">
+                                        <Heart className={`w-4 h-4 hover:fill-[#FF0000] hover:stroke-[#FF0000] transition-colors duration-200 ${post.hasLiked ? 'fill-[#FF0000] stroke-[#FF0000]' : ''}`}/> 
+                                        <p className="text-xs">{post.likesCount}</p>
+                                    </button>
+                                     <span className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+4px)] mt-2 ml-2 whitespace-nowrap px-2 py-1 text-xs text-black bg-white dark:bg-[#ffffff4d] dark:text-white rounded-md shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                                        Like this post
+                                    </span>
+                                </div>
+                                <div className="group relative inline-block">
+                                    <button className="px-2 py-1 border-1 rounded-full inline-flex items-center space-x-2 hover:bg-gray-200 dark:hover:bg-neutral-700 cursor-pointer">
+                                        <MessageCircle className="w-4 h-4 hover:text-blue-500 transition-colors duration-200"/> 
+                                        <p className="text-xs">{post.commentsCount}</p>
+                                    </button>
+                                     <span className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+4px)] mt-2 ml-2 whitespace-nowrap px-2 py-1 text-xs text-black bg-white dark:bg-[#ffffff4d] dark:text-white rounded-md shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                                        View comments
+                                    </span>                                    
+                                </div>
                             </div>
-                            <div className="inline-flex items-center">
-                                <Eye className="w-5 h-5 mr-1.5" /> <p className="text-sm">{post.views + post.anonymousViews}</p>
+                            
+                            <div className="group relative inline-flex items-center cursor-pointer">
+                                <Eye className="w-5 h-5 mr-1.5" /> 
+                                <p className="text-sm">{post.views + post.anonymousViews}</p>
+                                <span className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+4px)] mt-2 ml-2 whitespace-nowrap px-2 py-1 text-xs text-black bg-white dark:bg-[#ffffff4d] dark:text-white rounded-md shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
+                                    Views
+                                </span> 
                             </div>
                         </div>
                         {/* Comments Count */}
@@ -188,7 +250,7 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
                             <div className="w-8 h-8 min-w-8 min-h-8 bg-cover bg-center rounded-full mr-3"  
                             style={{ backgroundImage: `url(${mysession?.user?.image ?? '/default.jpg'})`,}}>
                             </div>
-                            <textarea name="comment" id="comment" value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="Write a comment..." className="flex-grow px-3 py-2 rounded-md border-1 border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300" rows={3}/>
+                            <textarea name="comment" id="comment" value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="Write a comment..." className="flex-grow px-3 py-2 rounded-md border-1 border-gray-300 placeholder-gray-500 dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-gray-300" rows={3}/>
                         </div>
                         <div className="flex justify-end mt-3">
                             <Mybutton onClick={handleCommentSubmit} content="Post" pxDefault="px-3" pyDefault="py-2"/>

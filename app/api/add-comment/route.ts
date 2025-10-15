@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+// Data fetching (server-side): uses shared instance to avoid connection pooling
+import { prisma } from '@/lib/prismaclient';
 import { auth } from '@/auth';
-
-const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   const session = await auth();

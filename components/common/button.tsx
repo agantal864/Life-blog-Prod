@@ -33,6 +33,7 @@ interface ButtonProps {
     mrMd?: string
     disabled?: boolean
     onClick?: () => void;
+    loading?: boolean;
 }
 
 export function Mybutton ({
@@ -59,16 +60,20 @@ export function Mybutton ({
     mrDefault,
     mrMd,
     disabled,
-    onClick
+    onClick,
+    loading
 }: ButtonProps) {
     const IconComponent = iconName ? icons[iconName] : undefined
+    const isDisabled = disabled || loading; 
+
     if (iconName) {
         return (
                 <button
-                    disabled={disabled}
+                    disabled={isDisabled}
                     type="submit"
                     onClick={onClick}
-                    className={`bg-black text-white text-sm rounded-md cursor-pointer inline-flex justify-between items-center
+                    className={`bg-black text-white text-sm rounded-md cursor-pointer inline-flex justify-between items-center transition-all duration-200 ease-in-out dark:bg-[#ffffff4d] dark:hover:bg-neutral-700
+                    hover:bg-neutral-800 hover:scale-[1.02] hover:shadow-md 
                     ${pxDefault} ${pyDefault} ${pxXl} ${pxLg} ${pxMd} ${pyXl} ${pyLg} ${pyMd} ${mxDefault} ${myDefault} ${mxXl}
                     ${mxLg} ${mxMd} ${myXl} ${myLg} ${myMd} ${mrDefault} ${mrMd}
                     `}>
@@ -123,12 +128,13 @@ export function Mybutton ({
                 <button
                     type="submit"
                     onClick={onClick}
-                    className={`bg-black text-white text-sm rounded-md cursor-pointer 
+                    className={`bg-black text-white text-sm rounded-md cursor-pointer transition-all duration-200 ease-in-out dark:bg-[#ffffff4d] dark:hover:bg-neutral-700
+                    hover:bg-neutral-800 hover:scale-[1.02] hover:shadow-md 
                     ${pxDefault} ${pyDefault} ${pxXl} ${pxLg} ${pxMd} ${pyXl} ${pyLg} ${pyMd} ${mxDefault} ${myDefault} ${mxXl}
                     ${mxLg} ${mxMd} ${myXl} ${myLg} ${myMd}
                     `}
                 >
-                    {content}
+                    {loading ? "Loading..." : content}
                 </button>
         )
     }

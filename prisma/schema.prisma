@@ -31,15 +31,19 @@ model Account {
 
 model User {
   // User Id
-  id            String          @id @default(cuid())
+  id              String          @id @default(cuid())
   // Username (linked to Google Username)
-  name          String?
+  name            String?
   // User email (linked to Google Email)
-  email         String          @unique
+  email           String          @unique
   // User Photo (linked to Google Photo)
-  image         String?
+  image           String?
   // If user is Admin or not
-  isAdmin       Boolean         @default(false)
+  isAdmin         Boolean         @default(false)
+  // If user is Master Admin
+  isMasterAdmin   Boolean         @default(false)
+  // Access Request
+  isAdminRequest  Boolean         @default(false)
 
   // Each User can have many accounts, and those accounts are linked to this User (tracks how many accounts are linked to the user)
   accounts      Account[]
@@ -147,9 +151,18 @@ model Viewer {
   // Set to the Id of the post where the viewer is at (foreign key)
   postId  String
   // Relation between Viewer and Post: postId in Viewer model === id in Post model (used to access the Post fields of the Post where the viewer is at)
-  post    Post     @relation(fields: [postId], references: [id])
+  post    Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   // Set to the Id of the user who viewed the post: userId = id in the current session
   userId  String
+}
+
+model Subscriber {
+  // Subscriber Id
+  id        String   @id @default(cuid())
+  // Subscriber Email
+  email     String   @unique
+  // Records the exact moment the entry was first created.
+  createdAt DateTime @default(now())
 }
 

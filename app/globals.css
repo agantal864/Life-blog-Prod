@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: ##EAEAEA;
+  --background: #eaeaea;
   --foreground: #171717;
 }
+
 body {
   background: var(--background);
   color: var(--foreground);
 }
 
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: rgb(255, 254, 254);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-figtree), serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 .glass-container {
@@ -27,3 +28,18 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.semiglass-container {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(7.5px);
+  background: #eaeaea;
+}
+
+.custom-md-editor textarea::placeholder {
+  color: #9ca3af; 
+  font-family: var(--font-inter), sans-serif;
+  font-size: 16px;
+}
+
+[data-color-mode="dark"] .custom-md-editor textarea::placeholder {
+  color: white; /* Tailwind's gray-300 */
+}

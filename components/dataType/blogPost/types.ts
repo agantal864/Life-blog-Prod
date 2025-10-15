@@ -3,7 +3,6 @@ export type Post = {
   title: string;
   content: string;
   tags: string[];
-  isFeatured: boolean;
   thumbnailUrl: string;
   views: number;
   anonymousViews: number;
