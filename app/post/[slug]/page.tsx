@@ -4,10 +4,11 @@ import { auth } from "@/auth";
 import { prisma } from '@/lib/prismaclient';
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  const {slug} = await params
   const session = await auth();
 
   const post = await prisma.post.findUnique({
-    where: { slug: params.slug },
+    where: { slug: slug },
     include: {
       author: true,
       comments: {

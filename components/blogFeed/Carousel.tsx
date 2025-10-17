@@ -46,6 +46,7 @@ export function MyPostCard({ card }: CardProps) {
                     src={card.thumbnailUrl}
                     alt={card.title}
                     fill
+                    priority
                     className="absolute inset-0 z-10 object-cover"
                 />
             </button>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import {  Dot  } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import ReactMarkdown from 'react-markdown';
 // UI Navigation
 import Link from "next/link";
 import { toast } from 'react-hot-toast';
@@ -53,6 +54,7 @@ export function CardMainContent ({content}: ContentProps) {
                         src={content.thumbnailUrl}
                         alt={content.title}
                         fill
+                        priority
                         sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover"
                     />
@@ -66,7 +68,17 @@ export function CardMainContent ({content}: ContentProps) {
                         <p className="text-xs">{formatDistanceToNow(new Date(content.createdAt), { addSuffix: true })}</p>
                     </div> 
                 </div>
-                <p className="line-clamp-3 md:max-w-[500] my-4">{content.content}</p>
+                
+                <ReactMarkdown 
+                className="line-clamp-3 md:max-w-[500] my-4"
+                components={{
+                blockquote: ({ node, ...props }) => (
+                    <blockquote {...props} className="border-l-4 pl-4 italic text-gray-600 mb-4" />
+                )
+                }}>
+                    {content.content}
+                </ReactMarkdown>
+               
             
                 {/* <div className="flex flex-row my-4">
                     <div className="inline-flex items-center space-x-2 mr-4">

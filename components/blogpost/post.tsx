@@ -34,7 +34,12 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
     // Submit Comment Function
     const handleCommentSubmit = async () => {
         if (!mysession?.user?.id) {
-            console.error('No author ID found in session');
+            toast.error('You must be logged in to comment');
+            return;
+        }
+        // Validate input
+        if ( !commentText ) {
+            toast.error('Oops! You forgot to write your comment.');
             return;
         }       
         const res = await fetch('/api/add-comment', {
@@ -188,6 +193,9 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
                             ),
                             p: ({ node, ...props }) => (
                                 <p {...props} className="mb-4" />
+                            ),
+                            blockquote: ({ node, ...props }) => (
+                                <blockquote {...props} className="border-l-4 pl-4 italic text-gray-600 mb-4" />
                             ),
                             }}>
                                 {post.content}

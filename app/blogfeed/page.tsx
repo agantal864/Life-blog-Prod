@@ -46,7 +46,7 @@ async function Blogfeed() {
                     <h2 className="pl-4 mx-auto text-2xl md:text-5xl font-bold dark:text-neutral-200 font-serif">
                     Blog Feed
                     </h2>
-                    <p className="pl-4 mt-4 mx-auto text-lg md:text-2xl dark:text-neutral-200 font-serif">Lorem ipsum blea on the contrary of course yes it is</p>
+                    <p className="pl-4 mt-4 mx-auto text-lg md:text-2xl dark:text-neutral-200 font-serif">Nothing to see here... Just a bunch of nonesense.</p>
                     <MyCarousel items={postCard} />
                 </div>
             </CardLayout>      

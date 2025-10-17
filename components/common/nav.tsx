@@ -28,6 +28,9 @@ function Navbar() {
     };
 
     const handleLogout = async () => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('requestedAdminAccess');
+        }
         const currentPath = window.location.pathname + window.location.search;
         await logout(currentPath);
     };
