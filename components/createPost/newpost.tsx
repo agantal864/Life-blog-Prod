@@ -235,7 +235,7 @@ export default function CreatePost() {
         toast((t) => (
             <div className="flex flex-col gap-2">
                 <span className="text-sm">
-                    User: "{currentSession?.user?.name}" doesn't have admin access. Would you like to request it?
+                    User: "{currentSession?.user?.name}" doesn&quot;t have admin access. Would you like to request it?
                 </span>
                 <div className="flex gap-2 justify-end">
                     <button
