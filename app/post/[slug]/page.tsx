@@ -1,4 +1,4 @@
-import BlogPost from "../../../components/blogPost/Post";
+import BLOGPOST from "@/components/blogpost/Post";
 import { auth } from "@/auth";
 // Data fetching (server-side): uses shared instance to avoid connection pooling
 import { prisma } from '@/lib/prismaclient';
@@ -48,5 +48,5 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   const hasLiked = post.likes.some((like) => like.userId === session?.user?.id);
 
-  return <BlogPost post={{ ...post, hasLiked }} session={session} />;
+  return <BLOGPOST post={{ ...post, hasLiked }} session={session} />;
 }

@@ -19,9 +19,9 @@ import {Post} from "@/components/dataType/blogPost/types"
 // Session Data Type
 import type { Session } from '@auth/core/types';
 // AnonymousViewTracker
-import AnonymousViewTracker from '@/components/blogPost/anonymousViewTracker';
+import AnonymousViewTracker from '@/components/blogpost/anonymousViewTracker';
 
-function BlogPost({ post: initialPost, session: currentSession}: {post: Post; session: Session | null}) {
+export default function BLOGPOST({ post: initialPost, session: currentSession}: {post: Post; session: Session | null}) {
     // Get Session
     const mysession = currentSession;
     // Variable to store Post
@@ -308,4 +308,3 @@ function BlogPost({ post: initialPost, session: currentSession}: {post: Post; se
     )
 }
 
-export default BlogPost;
