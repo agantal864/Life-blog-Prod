@@ -7,7 +7,6 @@ import Link from "next/link";
 // Data fetching (server-side): uses shared instance to avoid connection pooling
 import { prisma } from '@/lib/prismaclient';
 
-
 export default async function Home() {
     // Parallelize three queries
     const [featuredFirst, subContents, latestPosts] = await Promise.all([
