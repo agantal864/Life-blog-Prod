@@ -19,8 +19,8 @@ export async function handler(req: Request) {
     const results = await Promise.all(
       subscribers.map(async ({ email }) => {
         const { data, error } = await resend.emails.send({
-          from: "Azis <onboarding@resend.dev>", // Replace with verified domain when ready
-          to: "agantal864@gmail.com", // Replace with dynamic `email` once domain is verified
+          from: "Azis <onboarding@resend.dev>", 
+          to: email, 
           subject: "New Blog Update!",
           react: <EmailTemplate postTitle={postTitle} />,
         });

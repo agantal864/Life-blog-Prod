@@ -40,7 +40,10 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
         if ( !commentText ) {
             toast.error('Oops! You forgot to write your comment.');
             return;
-        }       
+        }     
+        // Show loading Toast
+        const toastId = toast.loading('Posting your comment...');
+
         const res = await fetch('/api/add-comment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -61,7 +64,9 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
                 };
             });
             setCommentText('');
+            toast.success('Comment posted!', { id: toastId });
         } else {
+            toast.error('Failed to add comment', { id: toastId });
             console.error("Failed to add comment");
         }    
     }
@@ -110,6 +115,8 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
             toast.error('You must be logged in to delete a comment');
             return;
         }
+        // Show loading toast
+        const toastId = toast.loading('Deleting your comment...');
 
         const res = await fetch('/api/delete-comment', {
             method: 'DELETE',
@@ -127,8 +134,9 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
             };
             });
             setOpenCommentId(null); // close dropdown
+            toast.success('Comment deleted!', { id: toastId });
         } else {
-            console.error('Failed to delete comment');
+            toast.error('Failed to delete comment', { id: toastId });
         }
     }
 
