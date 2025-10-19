@@ -1,4 +1,3 @@
-export const revalidate = 300;
 // UI components
 import SectionLayout from "@/components/layout/SectionLayout";
 import { CardLayout } from "@/components/featured/FeatureCard"
