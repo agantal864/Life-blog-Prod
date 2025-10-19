@@ -5,7 +5,6 @@ import { CardLayout } from "@/components/featured/FeatureCard"
 import { Heart, MessageCircle, ArrowLeft, Ellipsis, Eye} from 'lucide-react';
 import { Mybutton } from "@/components/common/button";
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks'
 import { formatDistanceToNow } from 'date-fns';
 import Image from "next/image";
@@ -196,7 +195,7 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
                         </div>
                         {/* Content */}
                         <div className="prose prose-neutral max-w-none pb-4">               
-                            <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}
+                            <ReactMarkdown remarkPlugins={[remarkBreaks]}
                             components={{
                             img: ({ node, ...props }) => (
                                 <img {...props} className="mb-4 rounded-md" />
