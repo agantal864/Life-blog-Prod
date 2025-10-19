@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 
 import Navbar from "@/components/common/nav";
 import Footer from "@/components/common/Footer"
-
+import LogRocketInit from '@/lib/logrocket-init';
 import GoogleProvider from "@/components/auth/GoogleProvider"
 
 const figtree = Figtree({
@@ -32,6 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${figtree.variable}`} suppressHydrationWarning>
       <body className="relative">
+        <LogRocketInit />
         <Toaster position="top-center" />
         <ThemeProvider attribute="class" enableSystem defaultTheme="system">
           <GoogleProvider>
