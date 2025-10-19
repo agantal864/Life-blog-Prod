@@ -159,20 +159,19 @@ export function SubscribeBox() {
     return (
         <div className="w-full max-w-xs space-y-2">
             <h1 className="font-serif text-lg lg:text-xl">Subscribe to my Blog</h1>
-            <form onSubmit={handleSubscribe} className="flex flex-row items-center">
-                <div className="w-full rounded-l-md border-1 border-r-0">
-                    <input
-                    value = {email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Type your email..."
-                    className="w-full flex-grow px-4 py-2 rounded-l-md bg-gray-100 dark:bg-black text-xs md:text-sm placeholder-gray-500 dark:placeholder-white focus:outline-none focus:ring-2 focus:ring-gray-300"
-                    />
-                </div>
-                <div className="rounded-r-md border-1 border-l-0">
-                    <button
-                    type="submit"
-                    className="px-4 py-2 bg-black dark:bg-[#ffffff4d] dark:hover:bg-neutral-700 text-white text-sm rounded-r-md cursor-pointer">Subscribe</button>
-                </div>
+            <form onSubmit={handleSubscribe} className="flex w-full">
+                <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Type your email..."
+                className="w-full px-4 py-2 text-sm bg-gray-100 dark:bg-black placeholder-gray-500 dark:placeholder-white border border-gray-300 dark:border-white rounded-l-md focus:outline-none focus:ring-2 focus:ring-gray-300"
+                />
+                <button
+                type="submit"
+                className="px-4 py-2 text-sm bg-black dark:bg-[#ffffff4d] dark:hover:bg-neutral-700 text-white border border-gray-300 dark:border-white border-l-0 rounded-r-md"
+                >
+                Subscribe
+                </button>
             </form>
         </div>
     )
