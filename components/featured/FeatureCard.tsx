@@ -138,27 +138,37 @@ export function SubscribeBox() {
     const [email, setEmail] = useState('');
 
     const handleSubscribe = async (e: React.FormEvent) => {
-         e.preventDefault();
+        e.preventDefault();
+
         if (!email || !email.includes("@")) {
             toast.error("Please enter a valid email.");
             return;
         }
+
         toast.loading("Subscribing...");
-        await new Promise((r) => setTimeout(r, 1000)); 
+        await new Promise((r) => setTimeout(r, 1000));
         toast.dismiss();
+
         const res = await fetch("/api/subscribe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),
         });
+
+        const data = await res.json();
+        setEmail("");
+
         if (res.ok) {
-            setEmail(""); 
-            toast.success("You're subscribed!");
+            if (data.message === "You're already subscribed.") {
+                toast("You're already subscribed.");
+            } else {
+                toast.success("You're subscribed!");
+            }
         } else {
-            setEmail(""); 
-            toast.error("Something went wrong.");
+            toast.error(data.error || "Something went wrong.");
         }
     };
+
 
     return (
         <div className="w-full max-w-xs space-y-2">
@@ -172,7 +182,7 @@ export function SubscribeBox() {
                 />
                 <button
                 type="submit"
-                className="px-4 py-2 text-sm bg-black dark:bg-[#ffffff4d] dark:hover:bg-neutral-700 text-white border border-gray-300 dark:border-white border-l-0 rounded-r-md"
+                className="px-4 py-2 text-sm bg-black dark:bg-[#ffffff4d] dark:hover:bg-neutral-700 text-white border border-gray-300 dark:border-white border-l-0 rounded-r-md cursor-pointer"
                 >
                 Subscribe
                 </button>
