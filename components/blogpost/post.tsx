@@ -70,9 +70,18 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
     // Like Function
     const handleLike = async () => {
          if (!mysession?.user?.id) {
-            console.error('No author ID found in session');
+            toast.error('You must be logged in to like a post');
             return;
         }
+        // Optimistically update UI
+        setPost((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                likesCount: prev.hasLiked ? prev.likesCount - 1 : prev.likesCount + 1,
+                hasLiked: !prev.hasLiked
+            };
+        });
         const res = await fetch('/api/like-post', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -82,15 +91,16 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
         });      
         if (res.ok) {
             await res.json();
+        }  else {
+            // Roll back UI if it failed
             setPost((prev) => {
                 if (!prev) return prev;
                 return {
                     ...prev,
-                    likesCount: prev.hasLiked ? prev.likesCount - 1 : prev.likesCount + 1,
+                    likesCount: prev.hasLiked ? prev.likesCount + 1 : prev.likesCount - 1,
                     hasLiked: !prev.hasLiked
                 };
             });
-        }  else {
             console.error("Failed to add like");
         }
     }
@@ -98,7 +108,7 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
     // Delete Comment Function
     const handleDelete = async (commentId: string) => {
         if (!mysession?.user?.id) {
-            console.error('No author ID found in session');
+            toast.error('You must be logged in to delete a comment');
             return;
         }
 

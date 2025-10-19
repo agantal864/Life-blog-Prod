@@ -36,7 +36,7 @@ function Footer() {
                 <ul className="text-base font-bold space-y-0.5">  
                   <li><Link href={"/"}>Home</Link></li>
                   <li><Link href={"/"}>Blog Feed</Link></li>
-                  <li><Link href={"/"}>Portfolio</Link></li>
+                  <li><a href={"https://azis-agantal-personal-portfolio.vercel.app/" } target="_blank" rel="noopener noreferrer">Portfolio</a></li>
                 </ul>
               </div>
 

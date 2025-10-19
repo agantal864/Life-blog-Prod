@@ -163,9 +163,9 @@ function Navbar() {
                     <Link onClick={handleCloseWithDelay}  href="/blogfeed" className="block text-sm font-medium  hover:bg-gray-100 active:bg-gray-200 focus:bg-gray-100 focus:outline-none px-3 py-2 rounded-md transition-colors duration-200">
                         Blog Feed
                     </Link>
-                    <Link onClick={handleCloseWithDelay}  href="/" className="block text-sm font-medium hover:bg-gray-100 active:bg-gray-200 focus:bg-gray-100 focus:outline-none px-3 py-2 rounded-md transition-colors duration-200">
+                    <a href={"https://azis-agantal-personal-portfolio.vercel.app"} target="_blank" rel="noopener noreferrer" className="block text-sm font-medium hover:bg-gray-100 active:bg-gray-200 focus:bg-gray-100 focus:outline-none px-3 py-2 rounded-md transition-colors duration-200">
                         Portfolio
-                    </Link>
+                    </a>
                 </div>
             )}
 
