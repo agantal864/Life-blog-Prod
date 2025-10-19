@@ -112,7 +112,7 @@ export function CardSubContent ({content}: ContentProps) {
             <div className="flex flex-row justify-between items-start gap-4">
                 <div className="flex flex-col flex-grow min-w-0">                    
                         <h1 className="font-serif font-semibold leading-none text-base md:text-md lg:text-lg xl:text-xl mr-2">{content.title}</h1>
-                        <p className="hidden lg:[display:-webkit-box] line-clamp-3 max-w-[300px] mr-2 my-2">{content.content}</p>
+                        <p className="hidden lg:[display:-webkit-box] line-clamp-3 text-sm max-w-[300px] mr-2 my-2">{content.content}</p>
                         <div className="flex flex-wrap items-center gap-x-1 text-xs my-2">
                             <p className="whitespace-nowrap">{content.author.name}</p>
                             <Dot className="w-4 h-4"/>
