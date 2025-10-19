@@ -4,6 +4,7 @@ import Image from "next/image";
 import {  Dot  } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
+import remarkBreaks from "remark-breaks";
 // UI Navigation
 import Link from "next/link";
 import { toast } from 'react-hot-toast';
@@ -68,15 +69,18 @@ export function CardMainContent ({content}: ContentProps) {
                     </div> 
                 </div>
                 
-                <ReactMarkdown 
-                className="line-clamp-3 md:max-w-[500] my-4"
-                components={{
-                blockquote: ({ node, ...props }) => (
-                    <blockquote {...props} className="border-l-4 pl-4 italic text-gray-600 mb-4" />
-                )
-                }}>
+                <div className="overflow-hidden break-words">
+                    <ReactMarkdown
+                    className="line-clamp-3 md:max-w-[500px] my-4 text-sm"
+                    remarkPlugins={[remarkBreaks]}
+                    components={{
+                        p: ({ node, ...props }) => <span {...props} />,
+                        blockquote: ({ node, ...props }) => <span {...props} />,
+                    }}
+                    >
                     {content.content}
-                </ReactMarkdown>
+                    </ReactMarkdown>
+                </div>
                
             
                 {/* <div className="flex flex-row my-4">
