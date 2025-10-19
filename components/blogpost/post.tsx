@@ -176,7 +176,7 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
                         {/* Background/Thumbnail */}
                         <div className="relative w-full aspect-[17/10] my-5 md:my-10 rounded-md overflow-hidden">
                             <Image
-                                src={`/uploads/${post.thumbnailUrl}`}
+                                src={post.thumbnailUrl}
                                 alt={post.title}
                                 fill
                                 priority

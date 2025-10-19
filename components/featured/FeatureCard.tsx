@@ -50,7 +50,7 @@ export function CardMainContent ({content}: ContentProps) {
             <Link href={`/post/${content.slug}`}>
                 <div className="relative w-full aspect-[5/3] overflow-hidden rounded-md">
                     <Image 
-                        src={`/uploads/${content.thumbnailUrl}`}
+                        src={content.thumbnailUrl}
                         alt={content.title}
                         fill
                         priority
@@ -117,7 +117,7 @@ export function CardSubContent ({content}: ContentProps) {
                 </div>
                 <div className="relative shrink-0 w-[100px] sm:w-[120px] md:w-[140px] lg:w-[160px] xl:w-[180px] aspect-[4/3] overflow-hidden rounded-md">                
                         <Image 
-                        src={`/uploads/${content.thumbnailUrl}`}
+                        src={content.thumbnailUrl}
                         alt={content.title}
                         fill
                         sizes="(max-width: 768px) 100px, (max-width: 1024px) 150px, 180px"

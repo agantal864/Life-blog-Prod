@@ -1,12 +1,16 @@
+import { v2 as cloudinary } from 'cloudinary';
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import path from 'path';
-import { nanoid } from 'nanoid';
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const file = formData.get('image') as File;
-  
+
   if (!file || file.type.split('/')[0] !== 'image') {
     return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
   }
@@ -14,12 +18,16 @@ export async function POST(req: NextRequest) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  
-  const ext = file.name.split('.').pop(); 
-  const filename = `img-${nanoid()}.${ext}`;
+  const imageUrl = await new Promise<string>((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { folder: 'uploads' },
+      (error, result) => {
+        if (error || !result) return reject(error);
+        resolve(result.secure_url); // ✅ This is now safe
+      }
+    );
+    uploadStream.end(buffer);
+  });
 
-  const filePath = path.join(process.cwd(), 'public', 'uploads', filename);
-  await writeFile(filePath, buffer);
-
-  return NextResponse.json({ url: filename }); 
+  return NextResponse.json({ url: imageUrl });
 }

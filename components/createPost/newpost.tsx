@@ -39,15 +39,17 @@ export default function CreatePost() {
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
     // Variable to store isUploading
     const [isUploading, setIsUploading] = useState(false);
+    // Variable to store contentUploading
+    const [contentIsUploading, setContentIsUploading] = useState(false);
     // Variable to store isLoading
     const [isLoading, setIsLoading] = useState(false);
 
     // Drop image in post content function
     const HandleContentImgDrop = async (event: React.DragEvent) => {
         // If still uploading, return (let the current upload finish)
-        if (isUploading) return;
+        if (contentIsUploading) return;
         // Update isUploading variable to true
-        setIsUploading(true);
+        setContentIsUploading(true);
 
         // Disables default event that redirects to image url
         event.preventDefault();
@@ -59,7 +61,7 @@ export default function CreatePost() {
 
          // Uploading Condition: if no file or not an image format: reset isUploading and return
         if (!file || !file.type.startsWith('image/')) {
-            setIsUploading(false);
+            setContentIsUploading(false);
             return;
         }
 
@@ -77,12 +79,12 @@ export default function CreatePost() {
         // Get url api response
         const { url } = await res.json();
         // Set image markdown format and save to markdown
-        const markdown = `![${file.name}](/uploads/${url})`;
+        const markdown = `![Image](${url})`;
 
         // Update Content variable
         setContent((prev) => (prev ?? '') + '\n' + markdown);
         // Update isUploading variable to false (Done Uploading)
-        setIsUploading(false);
+        setContentIsUploading(false);
     };
 
     // Drop image in thumbnail section function
@@ -300,9 +302,18 @@ export default function CreatePost() {
                     {/* Content */}
                     <div className="flex flex-col space-y-1">
                         <h2 className="font-serif font-medium text-lg">Content (Markdown)</h2>
-                        <div className="bg-gray-100 rounded-sm p-2" data-color-mode={theme === 'dark' ? 'dark' : 'light'} onDragOver={(e) => e.preventDefault()} onDrop={HandleContentImgDrop}>
+                        <div className="relative bg-gray-100 rounded-sm p-2" data-color-mode={theme === 'dark' ? 'dark' : 'light'} onDragOver={(e) => e.preventDefault()} onDrop={HandleContentImgDrop}>
                             <MDEditor value={content} onChange={setContent} preview="edit" height={600} textareaProps={{placeholder: 'Enter Markdown text...'}} previewOptions={{rehypePlugins: [[rehypeSanitize]]}}
                                 className="custom-md-editor prose prose-neutral max-w-none"/>
+                            {/* Loading Spinner */}
+                            {contentIsUploading && (
+                                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center z-10 rounded-md">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-gray-600" />
+                                        <span className="text-gray-700 text-sm font-medium">Uploading image...</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                     {/* Tags */}
@@ -313,15 +324,24 @@ export default function CreatePost() {
                     <div className="flex flex-col space-y-1">
                         <h2 className="font-serif font-medium text-lg">Thumbnail (Required)</h2>
                         <div onDrop={HandleThumbnailImgDrop} onDragOver={(e) => e.preventDefault()} className="relative border-2 border-dashed border-gray-300 rounded-sm bg-gray-50 dark:bg-black p-4 flex flex-col items-center justify-center text-center hover:border-gray-400 transition">
+                            {/* Loading Spinner */}
+                            {isUploading && (
+                                <div className="absolute inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-10 rounded-sm">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-black dark:border-white" />
+                                        <span className="text-sm font-medium">Uploading...</span>
+                                    </div>
+                                </div>
+                            )}     
                             {thumbnailUrl ? (
                                     <>
-                                        <img src={`uploads/${thumbnailUrl}`} alt="Thumbnail preview" className="max-h-64 rounded-md" />
+                                        <img src={thumbnailUrl} alt="Thumbnail preview" className="max-h-64 rounded-md" />
                                         <button onClick={() => setThumbnailUrl(null)} className="mt-2 text-sm text-red-500 hover:underline cursor-pointer">Remove thumbnail</button>
                                     </>
                                     ) : 
                                     (
                                         <>
-                                            <p className="text-sm text-gray-500 dark:text-white mb-2">Drag & drop your thumbnail here, or click to upload</p>
+                                            <p className="text-sm text-gray-500 dark:text-white mb-2">Drag & drop your thumbnail here, or click to upload <br/>  Max image size: 10 MB</p>
                                             <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={HandleThumbnailImgUpload}/>
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-gray-400 dark:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h10a4 4 0 004-4M7 10l5-5m0 0l5 5m-5-5v12" />

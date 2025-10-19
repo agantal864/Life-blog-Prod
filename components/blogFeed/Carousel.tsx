@@ -43,7 +43,7 @@ export function MyPostCard({ card }: CardProps) {
                 </div>
                 {/* Post Thumbnail */}
                 <Image 
-                    src={`/uploads/${card.thumbnailUrl}`}
+                    src={card.thumbnailUrl}
                     alt={card.title}
                     fill
                     priority

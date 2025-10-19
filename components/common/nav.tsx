@@ -87,14 +87,14 @@ function Navbar() {
                             Blog Feed
                         </span>                        
                     </Link>
-                    <Link href={"/"} className="group relative">                       
+                    <a href={"https://azis-agantal-personal-portfolio.vercel.app"} target="_blank" rel="noopener noreferrer" className="group relative">                       
                         <div className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors duration-200">               
                             <BriefcaseBusiness className="w-4 h-4" />                   
                         </div>                        
                         <span className="absolute top-full mt-2 ml-2 whitespace-nowrap px-2 py-1 text-xs text-black bg-white dark:bg-[#ffffff4d] dark:text-white rounded-md shadow opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
                             Portfolio
                         </span>                        
-                    </Link>
+                    </a>
                     <div className="group relative cursor-pointer">
                         <div onClick={toggleTheme} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-neutral-700 transition-colors duration-200">
                              {theme === "light" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
