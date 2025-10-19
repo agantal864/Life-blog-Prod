@@ -1,3 +1,4 @@
+export const revalidate = 300;
 // UI
 import SectionLayout from "@/components/layout/SectionLayout";
 import { CardLayout, CardBlock, CardGrid, CardMainContent, CardSubContentLayout, CardSubContent, SubscribeBox } from "@/components/featured/FeatureCard";

@@ -206,6 +206,7 @@ export default function CreatePost() {
         // If response is ok, get JSON response and redirect to the post
         if (res.ok) {
             const result = await res.json();
+            await fetch('/api/revalidate', { method: 'POST' });
             toast.success('Post created successfully!');
             setIsLoading(false);
             router.push(`/post/${result.slug}`);  
