@@ -79,7 +79,6 @@ export default async function Home() {
             }
         })
     ]);
-    
     return (
         <SectionLayout>
             <div className="py-5 xl:py-0"></div>

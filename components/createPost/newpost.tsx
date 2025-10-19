@@ -77,7 +77,7 @@ export default function CreatePost() {
         // Get url api response
         const { url } = await res.json();
         // Set image markdown format and save to markdown
-        const markdown = `![${file.name}](${url})`;
+        const markdown = `![${file.name}](/uploads/${url})`;
 
         // Update Content variable
         setContent((prev) => (prev ?? '') + '\n' + markdown);
@@ -315,7 +315,7 @@ export default function CreatePost() {
                         <div onDrop={HandleThumbnailImgDrop} onDragOver={(e) => e.preventDefault()} className="relative border-2 border-dashed border-gray-300 rounded-sm bg-gray-50 dark:bg-black p-4 flex flex-col items-center justify-center text-center hover:border-gray-400 transition">
                             {thumbnailUrl ? (
                                     <>
-                                        <img src={thumbnailUrl} alt="Thumbnail preview" className="max-h-64 rounded-md" />
+                                        <img src={`uploads/${thumbnailUrl}`} alt="Thumbnail preview" className="max-h-64 rounded-md" />
                                         <button onClick={() => setThumbnailUrl(null)} className="mt-2 text-sm text-red-500 hover:underline cursor-pointer">Remove thumbnail</button>
                                     </>
                                     ) : 

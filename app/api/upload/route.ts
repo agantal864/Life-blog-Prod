@@ -6,8 +6,7 @@ import { nanoid } from 'nanoid';
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const file = formData.get('image') as File;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
+  
   if (!file || file.type.split('/')[0] !== 'image') {
     return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
   }
@@ -22,8 +21,5 @@ export async function POST(req: NextRequest) {
   const filePath = path.join(process.cwd(), 'public', 'uploads', filename);
   await writeFile(filePath, buffer);
 
-
-  const encodedUrl = encodeURI(`${baseUrl}/uploads/${filename}`);
-
-  return NextResponse.json({ url: encodedUrl }); 
+  return NextResponse.json({ url: filename }); 
 }
