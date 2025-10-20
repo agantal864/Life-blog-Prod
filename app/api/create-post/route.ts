@@ -1,6 +1,6 @@
 // Data fetching (server-side): uses shared instance to avoid connection pooling
 import { prisma } from '@/lib/prismaclient';
-import { auth } from "@/auth"
+import { auth } from "@/myauth"
 import slugify from "slugify";
 
 export async function POST(req: Request) {

@@ -1,5 +1,5 @@
 import BLOGPOST from "@/components/blogpost/post";
-import { auth } from "@/auth";
+import { auth } from "@/myauth";
 // Data fetching (server-side): uses shared instance to avoid connection pooling
 import { prisma } from '@/lib/prismaclient';
 
