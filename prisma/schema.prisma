@@ -7,6 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@map("sessions")
+}
+
 model Account {
   // Fields required for Next.js Authentication
   userId            String
@@ -53,7 +72,7 @@ model User {
   comments      Comment[]
   // Each User can have many likes, and those likes are linked to this User (tracks how many likes are linked to the user)
   likes         Like[]
-
+  sessions      Session[]
   // Records the exact moment the entry was first created.
   createdAt DateTime @default(now())
   // Tracks the last time the record was modified.
