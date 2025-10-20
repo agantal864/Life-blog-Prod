@@ -1,2 +1,1 @@
-import { auth } from "auth"; 
-export default auth;
+export { auth as middleware } from "@/auth"
