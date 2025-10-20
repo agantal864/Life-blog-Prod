@@ -13,31 +13,41 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
-        // try {
-        //   const dbUser = await prisma.user.findUnique({
-        //     where: { id: user.id },
-        //     select: {
-        //       isAdmin: true,
-        //       isMasterAdmin: true,
-        //     },
-        //   });
-        //   token.isAdmin = dbUser?.isAdmin ?? false;
-        //   token.isMasterAdmin = dbUser?.isMasterAdmin ?? false;
-        // } catch (error) {
-        //   console.error("Error fetching user from DB in JWT callback:", error);
-        // }
-        token.isAdmin = (user as any).isAdmin ?? false;
-        token.isMasterAdmin = (user as any).isMasterAdmin ?? false;
       }
       return token;
     },
+   
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.sub as string;
-        session.user.isAdmin = token.isAdmin as boolean;
-        session.user.isMasterAdmin = token.isMasterAdmin as boolean;
+        // session.user.isAdmin = token.isAdmin as boolean;
+        // session.user.isMasterAdmin = token.isMasterAdmin as boolean;
       }
       return session;
     },
   },
 });
+
+
+
+//  async jwt({ token, user }) {
+//       if (user) {
+//         token.sub = user.id;
+//         // try {
+//         //   const dbUser = await prisma.user.findUnique({
+//         //     where: { id: user.id },
+//         //     select: {
+//         //       isAdmin: true,
+//         //       isMasterAdmin: true,
+//         //     },
+//         //   });
+//         //   token.isAdmin = dbUser?.isAdmin ?? false;
+//         //   token.isMasterAdmin = dbUser?.isMasterAdmin ?? false;
+//         // } catch (error) {
+//         //   console.error("Error fetching user from DB in JWT callback:", error);
+//         // }
+//         token.isAdmin = (user as any).isAdmin ?? false;
+//         token.isMasterAdmin = (user as any).isMasterAdmin ?? false;
+//       }
+//       return token;
+//     },
