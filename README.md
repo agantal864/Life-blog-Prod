@@ -1,3 +1,15 @@
+Website: https://azis-agantal-blog.vercel.app/
+
+Framework: React, NextJS
+
+CSS Framework:TailwindCSS
+
+Auth: NextAuthjs
+
+Adaptor: Prisma
+
+DB: NeonDB (Postgresql)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
