@@ -53,7 +53,8 @@ model User {
   // Username (linked to Google Username)
   name            String?
   // User email (linked to Google Email)
-  email           String          @unique
+  email           String?          @unique
+  emailVerified DateTime?         @map("email_verified")
   // User Photo (linked to Google Photo)
   image           String?
   // If user is Admin or not
@@ -76,7 +77,6 @@ model User {
   createdAt DateTime @default(now())
   // Tracks the last time the record was modified.
   updatedAt DateTime @updatedAt
-
   @@map("users")
 }
  
