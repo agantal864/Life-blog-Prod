@@ -177,10 +177,10 @@ export default function CreatePost() {
             return;
         }
         // If not Admin, return
-        // if (!currentSession?.user?.isAdmin) {
-        //     toast.error(`User "${currentSession?.user?.name}" does not have admin access. Please request access to create a post.`);
-        //     return;
-        // }
+        if (!currentSession?.user?.isAdmin) {
+            toast.error(`User "${currentSession?.user?.name}" does not have admin access. Please request access to create a post.`);
+            return;
+        }
         
         // Validate input
         if (!title || !content || !thumbnailUrl) {
@@ -225,10 +225,10 @@ export default function CreatePost() {
             return;
         }
         // If isAdmin, return
-        // if (currentSession?.user?.isAdmin) {
-        //     toast.error('Admin access is already granted.');
-        //     return;
-        // }
+        if (currentSession?.user?.isAdmin) {
+            toast.error('Admin access is already granted.');
+            return;
+        }
 
         if (typeof window !== 'undefined' && localStorage.getItem('requestedAdminAccess')) {
             toast.error('You’ve already requested admin access. Please wait for approval.');

@@ -232,9 +232,9 @@ export default function BLOGPOST({ post: initialPost, session: currentSession}: 
                                 </div>
                             ))}
                         </div>
-                        {/* {mysession?.user.isMasterAdmin && 
+                        {mysession?.user.isMasterAdmin && 
                             <Mybutton onClick={handleNotifySubscriber} content="Notify Subscriber" pxDefault="px-2" pyDefault="py-2"/> 
-                        } */}
+                        }
                         {/* Likes, Comments & Views */}
                         <div className="flex justify-between px-2 py-2 border-y-1 border-gray-300">
                             <div>
