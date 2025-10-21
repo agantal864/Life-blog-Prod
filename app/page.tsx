@@ -11,7 +11,7 @@ export default async function Home() {
     // Parallelize three queries
     const [featuredFirst, subContents, latestPosts] = await Promise.all([
         // Query Latest Featured Post
-        prisma.post.findFirstOrThrow({
+        prisma.post.findFirst({
             where: { isFeatured: true },
             orderBy: { createdAt: 'desc' },
             select: {
@@ -88,14 +88,21 @@ export default async function Home() {
                 </h1>
                 <CardGrid>
                     <CardBlock>
-                        <CardMainContent content={featuredFirst} />
+                        {featuredFirst ? (
+                            <CardMainContent content={featuredFirst} />
+                        ) : (
+                            <div className="p-4 text-gray-500">No featured post yet.</div>
+                        )}
                     </CardBlock>
                     <CardBlock>
                         <CardSubContentLayout>
-                            {subContents.map((item, index) => (
+                            {subContents.length > 0 ? (
+                                subContents.map((item, index) => (
                                     <CardSubContent key={index} content={item} />
                                 ))
-                            }
+                                ) : (
+                                <div className="p-4 text-gray-500">No additional featured posts.</div>
+                            )}
                             <SubscribeBox />
                         </CardSubContentLayout>
                     </CardBlock>
@@ -108,22 +115,36 @@ export default async function Home() {
                 <h1 className="font-serif font-semibold text-3xl px-4 py-2">
                     Latest
                 </h1>
-                <CardGrid>
-                    <CardBlock>
-                        <CardMainContent content={latestPosts[0]} />
-                    </CardBlock>
-                    <CardBlock>
-                        <CardMainContent content={latestPosts[1]} />
-                    </CardBlock>
-                </CardGrid>
-                <CardGrid>
-                    <CardBlock>
-                        <CardMainContent content={latestPosts[2]} />
-                    </CardBlock>
-                    <CardBlock>
-                        <CardMainContent content={latestPosts[3]} />
-                    </CardBlock>
-                </CardGrid>
+                {latestPosts.length > 0 ? (
+                    <>
+                        <CardGrid>
+                        {latestPosts[0] && (
+                            <CardBlock>
+                            <CardMainContent content={latestPosts[0]} />
+                            </CardBlock>
+                        )}
+                        {latestPosts[1] && (
+                            <CardBlock>
+                            <CardMainContent content={latestPosts[1]} />
+                            </CardBlock>
+                        )}
+                        </CardGrid>
+                        <CardGrid>
+                        {latestPosts[2] && (
+                            <CardBlock>
+                            <CardMainContent content={latestPosts[2]} />
+                            </CardBlock>
+                        )}
+                        {latestPosts[3] && (
+                            <CardBlock>
+                            <CardMainContent content={latestPosts[3]} />
+                            </CardBlock>
+                        )}
+                        </CardGrid>
+                    </>
+                    ) : (
+                    <div className="p-4 text-gray-500">No recent posts available.</div>
+                )}
             </CardLayout>
             
             <div className="py-5"></div>
