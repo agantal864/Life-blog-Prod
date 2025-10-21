@@ -7,39 +7,39 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {strategy: "jwt"},
   ...authConfig,
-  callbacks: {
-     async jwt({ token, user }) {
-        if (user) {
-          token.sub = user.id;
+  // callbacks: {
+  //    async jwt({ token, user }) {
+  //       if (user) {
+  //         token.sub = user.id;
 
-          try {
-            const dbUser = await prisma.user.findUnique({
-              where: { id: user.id },
-              select: {
-                isAdmin: true,
-                isMasterAdmin: true,
-              },
-            });
+  //         try {
+  //           const dbUser = await prisma.user.findUnique({
+  //             where: { id: user.id },
+  //             select: {
+  //               isAdmin: true,
+  //               isMasterAdmin: true,
+  //             },
+  //           });
 
-            token.isAdmin = dbUser?.isAdmin ?? (user as any).isAdmin ?? false;
-            token.isMasterAdmin = dbUser?.isMasterAdmin ?? (user as any).isMasterAdmin ?? false;
-          } catch (error) {
-            console.error("Error fetching user from DB in JWT callback:", error);
-            token.isAdmin = false;
-            token.isMasterAdmin = false;
-          }
-        }
-      return token;
-  },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.sub as string;
-        session.user.isAdmin = token.isAdmin as boolean;
-        session.user.isMasterAdmin = token.isMasterAdmin as boolean;
-      }
-      return session;
-    },
-  },
+  //           token.isAdmin = dbUser?.isAdmin ?? (user as any).isAdmin ?? false;
+  //           token.isMasterAdmin = dbUser?.isMasterAdmin ?? (user as any).isMasterAdmin ?? false;
+  //         } catch (error) {
+  //           console.error("Error fetching user from DB in JWT callback:", error);
+  //           token.isAdmin = false;
+  //           token.isMasterAdmin = false;
+  //         }
+  //       }
+  //     return token;
+  // },
+  //   async session({ session, token }) {
+  //     if (session.user) {
+  //       session.user.id = token.sub as string;
+  //       session.user.isAdmin = token.isAdmin as boolean;
+  //       session.user.isMasterAdmin = token.isMasterAdmin as boolean;
+  //     }
+  //     return session;
+  //   },
+  // },
 });
 
   // callbacks: {
