@@ -37,18 +37,6 @@ model Session {
   @@map("sessions")
 }
  
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
- 
-  @@map("users")
-}
- 
 model VerificationToken {
   identifier String
   token      String
@@ -58,38 +46,38 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// model User {
-//   // User Id
-//   id              String          @id @default(cuid())
-//   // Username (linked to Google Username)
-//   name            String?
-//   // User email (linked to Google Email)
-//   email           String?         
-//   emailVerified DateTime?         @map("email_verified")
-//   // User Photo (linked to Google Photo)
-//   image           String?
-//   // If user is Admin or not
-//   isAdmin         Boolean         @default(false)
-//   // If user is Master Admin
-//   isMasterAdmin   Boolean         @default(false)
-//   // Access Request
-//   isAdminRequest  Boolean         @default(false)
+model User {
+  // User Id
+  id              String          @id @default(cuid())
+  // Username (linked to Google Username)
+  name            String?
+  // User email (linked to Google Email)
+  email         String?   @unique      
+  emailVerified   DateTime?         @map("email_verified")
+  // User Photo (linked to Google Photo)
+  image           String?
+  // If user is Admin or not
+  isAdmin         Boolean         @default(false)
+  // If user is Master Admin
+  isMasterAdmin   Boolean         @default(false)
+  // Access Request
+  isAdminRequest  Boolean         @default(false)
 
-//   // Each User can have many accounts, and those accounts are linked to this User (tracks how many accounts are linked to the user)
-//   accounts      Account[]
-//   // Each User can have many posts, and those posts are linked to this User (tracks how many posts are linked to the user)
-//   posts         Post[]
-//   // Each User can have many comments, and those comments are linked to this User (tracks how many comments are linked to the user)
-//   comments      Comment[]
-//   // Each User can have many likes, and those likes are linked to this User (tracks how many likes are linked to the user)
-//   likes         Like[]
-//   sessions      Session[]
-//   // Records the exact moment the entry was first created.
-//   createdAt DateTime @default(now())
-//   // Tracks the last time the record was modified.
-//   updatedAt DateTime @updatedAt
-//   @@map("users")
-// }
+  // Each User can have many accounts, and those accounts are linked to this User (tracks how many accounts are linked to the user)
+  accounts      Account[]
+  // Each User can have many posts, and those posts are linked to this User (tracks how many posts are linked to the user)
+  posts         Post[]
+  // Each User can have many comments, and those comments are linked to this User (tracks how many comments are linked to the user)
+  comments      Comment[]
+  // Each User can have many likes, and those likes are linked to this User (tracks how many likes are linked to the user)
+  likes         Like[]
+  sessions      Session[]
+  // Records the exact moment the entry was first created.
+  createdAt DateTime @default(now())
+  // Tracks the last time the record was modified.
+  updatedAt DateTime @updatedAt
+  @@map("users")
+}
  
 model Post {
   // Post Id
@@ -118,7 +106,7 @@ model Post {
   // Set to the Id of the author of the Post (foreign key)
   authorId            String
   // Relation between Post and User: authorId in Post model === id in User model (used to access the User fields of the Poster)
- //author              User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author              User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   // Each post can have many comments, and those comments are linked to this post (tracks how many comments are linked to the Post)
   comments            Comment[]
@@ -145,7 +133,7 @@ model Like {
   // Set to the Id of the user who liked the post
   userId    String
   // Relation between Like and User: userId in Like model === id in User model (used to access the User fields of the liker)
- // user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   // Records the exact moment the entry was first created.
   createdAt DateTime @default(now())
@@ -167,7 +155,7 @@ model Comment {
   // Set to the Id of the author of the comment (foreign key)
   authorId        String 
   // Relation between Comment and User: authorId in Comment model === id in User model (used to access the User fields of the commenter)
-  //author          User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author          User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   // Records the exact moment the entry was first created.
   createdAt DateTime @default(now())
