@@ -24,7 +24,7 @@ function Navbar() {
 
     const handleLogin = async () => {
         const currentPath = window.location.pathname + window.location.search;
-        await login(currentPath);
+        await login();
     };
 
     const handleLogout = async () => {
