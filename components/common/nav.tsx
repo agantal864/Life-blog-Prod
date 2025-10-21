@@ -115,7 +115,7 @@ function Navbar() {
                                 </div>
                                 <Link href={"/createpost"}><Mybutton iconName="CirclePlus" iconPos="left" hidden="content" content="New Post" pxDefault="px-2" pxLg="lg:px-4" pyDefault="py-1.5" mrDefault="mr-3" mrMd="md:mr-5"/></Link>
                                 <button onClick={() => setaccIsOpen(!accisOpen)} 
-                                className="w-8 h-8 bg-cover bg-center rounded-full cursor-pointer" aria-expanded={accisOpen} aria-label="User menu" role="button" style={{ backgroundImage: `url('${currentsession?.user?.image}')` }}>
+                                className="w-8 h-8 bg-cover bg-center rounded-full cursor-pointer" aria-expanded={accisOpen} aria-label="User menu" role="button" style={{ backgroundImage: `url(${currentsession?.user?.image ?? '/default.jpg'})` }}>
                                 </button>
                                 {accisOpen && (
                                     <div className={`absolute top-full right-5 rounded-b-xl shadow-lg transition-all duration-300 ease-in-out px-4 pt-5 pb-3 z-50 w-fit min-w-[8rem] 
